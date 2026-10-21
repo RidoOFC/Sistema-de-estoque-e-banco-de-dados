@@ -1,0 +1,73 @@
+/* 1. Reset para remover margens padrão e definir uma fonte moderna */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 2. Fundo escuro para a página inteira */
+body {
+    background-color: #181a1b;
+    color: #ffffff;
+}
+
+/* 3. Barra de Navegação (Cabeçalho) */
+header {
+    display: flex;
+    justify-content: flex-start; /* Espaça o título para a esquerda e o menu para a direita */
+    align-items: center;            /* Alinha tudo verticalmente ao centro */
+    background-color: #212529;      /* Tom de cinzento escuro bonito */
+    padding: 15px 30px;             /* Espaçamento interno em cima/baixo e lados */
+    gap: 60px; /* Sombra suave por baixo da barra */
+}
+
+/* 4. Estilo do Título (Logo) */
+header h1 {
+    font-size: 1.4rem;
+    color: #ffffff;
+}
+
+/* 5. Estilo da Lista (Menu) */
+ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 25px; /* Espaço uniforme entre cada opção do menu */
+}
+
+/* 6. Estilo dos Links e dos Ícones */
+ul li a {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Espaço entre o ícone e o texto */
+    text-decoration: none; /* Remove o sublinhado dos links */
+    color: #a0a6b1;        /* Cor dos links (cinzento-claro suave) */
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+/* 7. Efeito quando passa o rato por cima do link */
+ul li a:hover {
+    color: #ffffff; /* O texto e o ícone ficam brancos */
+}
+/* Espaçamento do conteúdo abaixo da barra superior */
+.conteudo-principal {
+    padding: 30px;
+}
+
+/* Estilo do subtítulo H2 */
+.titulo-pagina {
+    display: flex;
+    align-items: center;
+    gap: 12px;           /* Espaço entre o ícone e o texto */
+    font-size: 1.8rem;
+    color: #ffffff;      /* Cor do texto em branco */
+    font-weight: 600;
+}
+
+/* Estilo específico para o ícone do subtítulo */
+.titulo-pagina i {
+    color: #4a90e2;      /* Cor azul igual ao exemplo */
+}

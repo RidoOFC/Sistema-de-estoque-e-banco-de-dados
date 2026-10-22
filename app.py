@@ -1,17 +1,23 @@
 from flask import Flask, render_template, Blueprint
 from db import init_db
 from routes import main
+import os
+from dotenv import load_dotenv
 
-app = Flask(__name__)
+load_dotenv()
+
+
+app=Flask(__name__)
+app.secret_key = 'minha_chave_super_secreta_para_o_flask_123'
+
 
 # Regista as rotas vindas do ficheiro routes.py
 app.register_blueprint(main)
-app.secret_key = 'sua_chave_secreta_super_segura'
 
 
-@app.route('/')
+@app.route('/') 
 def home():
-  return render_template('Index.html',
+  return render_template('index.html',
         total_produtos=0,
         total_estoque_baixo=0,
         valor_total=0.0

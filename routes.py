@@ -1,6 +1,10 @@
 import math
 from flask import Blueprint, render_template, request, url_for, flash, redirect
 import db
+from db import buscar_dados_relatorio
+from ia import gerar_relatorio_texto
+import markdown
+
 
 main = Blueprint('main', __name__)
 
@@ -128,7 +132,7 @@ def editar_produto(id):
     O <int:id> na rota é um conversor: Flask garante que 'id'
     seja um inteiro antes de chamar a função.
     """
-    produto = db.get_produto_por_id(id)
+    produto = db.get_produto_id(id)
 
     if not produto:
         flash("Produto não encontrado.", 'danger')
@@ -265,3 +269,52 @@ def transacao_estoque(id):
             flash(mensagem, 'danger')
 
     return render_template('produtos/transacao.html', produto=produto)
+
+# ============================================================
+# BUSCA DE DADOS
+# ============================================================
+
+@main.route('/relatorios-ia')
+def relatorio_ia():
+    dados = buscar_dados_relatorio()
+    texto = gerar_relatorio_texto(dados)
+    
+    # Transforma o Markdown em HTML bonito AQUI no Python
+    texto_formatado = markdown.markdown(texto, extensions=['extra'])
+    
+    print("--- O TEXTO FORMATADO FICOU ASSIM: ---")
+    print(texto_formatado) # <--- COLOQUE ISSO AQUI
+    print("--------------------------------------")
+
+    return render_template('relatorio/buscar_dados_ia.html', relatorio=texto_formatado)
+  
+
+@main.route('/produtos/buscar/')
+def Buscar_dados_relatorio():
+    '''Permine que a IA  lêia os dados do estoque e gera um relatório em texto amigável,
+     A IA NÃO calcula nada. Ela só escreve. '''
+    conn = sqlite3.connect('estoque_baixo')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT COUNT(*) as total, SUM(quantidade) as qtd_total, SUM(preco * quantidade) as valor_total FROM produtos")
+    resumo = dict(cursor.fetchone())
+    #Produtos com Estoque Baixo (ex: menos de 5 unidades)
+    
+    cursor.execute("SELECT nome, quantidade FROM produtos WHERE quantidade < 5 ORDER BY quantidade ASC")
+    estoque_baixo = [dict(row) for row in cursor.fetchall()]
+    
+    cursor.execute("SELECT nome, preco, quantidade FROM produtos ORDER BY preco DESC LIMIT 3")
+    mais_caros = [dict(row) for row in cursor.fetchall()]
+
+    conn.close()
+
+
+    return{
+        "resumo_geral": resumo,
+        "produtos_estoque_baixo": estoque_baixo,
+        "produtos_mais_caros": mais_caros
+       }
+# ============================================================
+# TESTE
+# ============================================================

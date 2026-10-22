@@ -22,7 +22,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid px-4">
             <a class="navbar-brand fw-bold" href="{{ url_for('main.dashboard') }}">
-                <i class="bi bi-box-seam-fill text-warning"></i> SistEstoque
+                <i class="bi bi-box-seam-fill text-warning"></i> RidEstoque
             </a>
 
             {# Botão hamburguer para mobile #}
@@ -88,7 +88,40 @@
     </div>
 
     {# ===== RODAPÉ ===== #}
- 
+ <!-- Botão Flutuante do Relatório IA -->
+<a href="{{ url_for('main.relatorio_ia') }}" class="botao-ia-flutuante" title="Gerar Relatório com IA">
+    <!-- COLOQUE O SEU ÍCONE AQUI (Substitua este emoji pelo seu código/foto) -->
+    🤖
+</a>
+
+<style>
+    .botao-ia-flutuante {
+        position: fixed;
+        bottom: 30px; /* Distância do fundo */
+        right: 30px;  /* Distância da direita */
+        width: 65px;
+        height: 65px;
+        background-color: #4F46E5; /* Cor de fundo (Azul/Roxo moderno) */
+        color: white;
+        border-radius: 50%; /* Deixa redondo */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px; /* Tamanho do ícone */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombrinha para dar profundidade */
+        text-decoration: none;
+        transition: all 0.3s ease; /* Animação suave */
+        z-index: 1000; /* Garante que fica por cima de tudo */
+    }
+
+    /* Efeito quando o mouse passa por cima */
+    .botao-ia-flutuante:hover {
+        transform: scale(1.1) translateY(-5px); /* Aumenta e sobe um pouquinho */
+        background-color: #4338CA; /* Cor mais escura no hover */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        color: white;
+    }
+</style>
     {# Bloco para scripts específicos de cada página #}
     {% block scripts %}{% endblock %}
 </body>

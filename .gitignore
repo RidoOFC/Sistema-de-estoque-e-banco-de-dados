@@ -3,4 +3,6 @@ ven/
 __pycache__/
 *.pyc
 instance/
-estoque_db
+estoque.db
+*.db
+.env

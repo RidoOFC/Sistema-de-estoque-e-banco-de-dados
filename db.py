@@ -1,6 +1,6 @@
 import sqlite3
 
-DATABASE='estoque_db'
+DATABASE='estoque.db'
 LIMIAR_ESTOQUE_BAIXO = 10
 
 def get_db_connection():
@@ -19,14 +19,17 @@ def init_db():
 #----------------------
 # PRODUTOS
 #----------------------
-
 def criar_produto(nome, sku, descricao, preco, quantidade, localizacao):
     conn = get_db_connection()
-    conn.execute(
-        '''INSERT INTO produtos (nome, sku, preco, descricao, quantidade, localizacao)
-       VALUES(?, ?, ?, ?, ?, ?)''',
+    cursor = conn.cursor()
+    
+    # O INSERT agora está na mesma ordem dos VALUES
+    cursor.execute(
+        '''INSERT INTO produtos (nome, sku, descricao, preco, quantidade, localizacao) 
+        VALUES(?, ?, ?, ?, ?, ?)''',
         (nome, sku, descricao, preco, quantidade, localizacao)
     )
+    
     conn.commit()
     conn.close()
 
@@ -86,13 +89,17 @@ def get_todos_produtos(busca=None, pagina=1, por_pagina=10):
     return produtos, total
 
 def get_produto_id(produto_id):
-    """busca e retora um unico produto pelo seu ID. Rertorna none se não achar nada."""
-    conn = get_db_connection()
-    produto = conn.execute(
-        'SELECT FROM produtos WHERE id = ?' , (produto_id,)
-    ).fetchone()
+    """Busca e retorna um único produto pelo seu ID."""
+    conn = get_db_connection()  # <--- A variável conn é criada aqui!
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT * FROM produtos WHERE id = ?', (produto_id,))
+    produto = cursor.fetchone()
+    
     conn.close()
-    return produto
+    
+    # Retorna como dicionário para o HTML conseguir ler os campos
+    return dict(produto) if produto else None
 
 def get_produto_por_sku(sku, excluir_id=None):
     """
@@ -232,3 +239,29 @@ def registrar_transacao(produto_id, tipo, quantidade_transacao):
         f"{msg_tipo} de {quantidade_transacao} unidade(s) registrada. "
         f"Novo estoque: {novo_estoque} unidades."
     )
+
+
+def get_produto_por_id(id):
+    conn = sqlite3.connect('estoque.db')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT * FROM produtos WHERE id = ?", (id,))
+    produto = cursor.fetchone()
+    
+    conn.close()
+    
+    # Retorna o produto como dicionário (ou None se não achar)
+    return dict(produto) if produto else None
+
+# ============================================================
+# BUSCA DE DADOS
+# ============================================================
+
+
+
+def buscar_dados_relatorio():
+    # Conecte ao seu banco (ajuste o nome do arquivo se necessário)
+    conn = get_db_connection() # ou o nome que você usa
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
